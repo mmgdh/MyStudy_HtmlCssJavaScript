@@ -85,8 +85,9 @@
         <source src="~/Audios/川田麻美 (川田まみ) - 绯色の空 (绯色天空).mp3" type="audio/mp3" />
     </audio>
 
-    
-    
+    <p id="location">获取位置</p>
+    <button onclick="getLocation()">Try Get</button>
+    <div id="mapholder"></div>
 
 
 
@@ -97,8 +98,39 @@
 
 
 
-
-
+    <script>
+        var x = document.getElementById("loacation");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            }
+            else {
+                x.innerHTML = "获取地理位置失败";
+            }
+            function showPosition(position) {
+                var latlon = position.coords.latitude + ", " + position.coords.longitude;
+                var img_url = "http://maps.googleapis.com/maps/api/staticmap? center=" + latlon + "&zoom=14&size=400x300&sensor=false";
+                document.getElementById("mapholder").innerHTML = "<img src='" + img_url + "' />";
+                alert(latlon);
+            }
+            function showError(Error) {
+                switch (Error.code) {
+                    case Error.PERMISSION_DENIED:
+                        X.innerHTML = "User Denied ";
+                        break;
+                    case Error.PERMISSION_UNAVAILABLE:
+                        x.innerHTML = "Location information is unavailable";
+                        break;
+                    case Error.TIMEOUT:
+                        x.innerHTML = "Time Out";
+                        break;
+                    case Error.UnKNown_Error:
+                        x.innerHTML = "UnKown";
+                        break;
+                }
+            }
+        }
+    </script>
 
     <script type="text/javascript">
         var intValue = 0;
