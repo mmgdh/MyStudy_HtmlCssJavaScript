@@ -1,0 +1,93 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Html5_Canvas</title>
+    <style>
+        body{
+            background-color:#eeeeee;
+        }
+        #outer{
+            margin-left:40px;
+            margin-top:40px;
+        }
+    </style>
+</head>
+<body>
+    线性渐变
+    <div id="outer">
+        <canvas id="canvas1" width="400" height="400">
+            不支持
+        </canvas>
+    </div>
+
+    径向渐变
+    <div id="outer">
+        <canvas id="canvas2" width="400" height="400">
+            不支持
+        </canvas>
+    </div>
+
+
+
+    <script>
+        var mycanvas = document.getElementById("canvas1");
+        var cntx = mycanvas.getContext("2d");
+        var mygradiant = cntx.createLinearGradient(30, 30, 300, 300);
+        mygradiant.addColorStop("0", "#CC3");
+        mygradiant.addColorStop(".40", "#FF0");
+        mygradiant.addColorStop(".57", "#390");
+        mygradiant.addColorStop(".82", "#90C");
+        mygradiant.addColorStop("1.0", "#9FF");
+        cntx.fillStyle = mygradiant;
+        cntx.fillRect(0, 0, 400, 400);
+    </script>
+
+    <script>
+        var mycanvas2 = document.getElementById("canvas2");
+        var cntx2 = mycanvas2.getContext('2d');
+        var mygradient = cntx2.createRadialGradient(200, 200, 10, 300, 300, 300);
+        mygradient.addColorStop("0", "#CC3");
+        mygradient.addColorStop(".40", "#FF0");
+        mygradient.addColorStop(".57", "#390");
+        mygradient.addColorStop(".82", "#90C");
+        mygradient.addColorStop("1.0", "#9FF");
+        cntx2.fillStyle = mygradient;
+        cntx2.fillRect(0, 0, 400, 400);
+    </script>
+
+
+    <script>
+        window.onload = draw;
+        function draw() {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            context.save();
+            ///保存
+            context.translate(200, 200);
+            var deg = 2 * Math.PI / 12;
+            ///表盘
+            context.save();
+            context.beginPath();
+            for (var i = 0; i < 13; i++) {
+                var x = Math.sin(i * deg);
+                var y = -Math.cos(i * deg);
+                context.lineTo(x * 150, y * 150);
+            }
+            var c = context.createRadialGradient(0, 0, 0, 0, 0, 130);
+            c.addColorStop(0, "#360");
+            c.addColorStop(1, "#6C0");
+            context.fillStyle = c;
+            context.fill();
+            context.closePath();
+            context.restore();
+        }
+    </script>
+</body>
+</html>
