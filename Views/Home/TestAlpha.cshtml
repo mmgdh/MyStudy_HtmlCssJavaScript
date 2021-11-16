@@ -1,0 +1,60 @@
+﻿<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=gb2312" />
+    <style type="text/css">
+        .g{
+            filter:opacity(1);          
+        }
+        .g1 {
+            filter: opacity(0.7);
+        }
+        .g2 {
+            filter: opacity(0.5);
+        }
+        .g3 {
+            filter: opacity(0.2);
+        }
+
+        .b{
+            filter:blur(100);
+            
+        }
+        .b2 {
+            filter: blur(5);
+        }
+        .y{
+            filter:chroma(color=#ff9999);
+        }
+    </style>
+</head>
+<body>
+    <table width="400" border="0" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <td align="center">原图（不透明度100）</td>
+            <td align="center">原图（不透明度70）</td>
+        </tr>
+        <tr>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="g" /></td>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="g1" /></td>
+        </tr>
+        <tr>
+            <td align="center">原图（不透明度60）</td>
+            <td align="center">原图（不透明度35）</td>
+        </tr>
+        <tr>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="g2" /></td>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="g3" /></td>
+        </tr>
+    </table>    
+    <table width="400" border="1" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <td align="center">原图 无效</td>
+            <td align="center">效果（450，150）</td>
+        </tr>
+        <tr>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="b" /></td>
+            <td><img src="~/Images/index.jpg" width="200" height="118" class="b2" /></td>
+        </tr>
+    </table>
+</body>
+</html>
