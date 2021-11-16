@@ -17,6 +17,9 @@ namespace MyStudy_HtmlCssJavaScript
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews(x => x.EnableEndpointRouting = false);
+
+            var Builder = services.AddControllersWithViews(x => x.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
