@@ -10,7 +10,7 @@ namespace MyStudy_HtmlCssJavaScript.Controllers
     {
         public IActionResult Index()
         {
-            return View("TestHtmlChangeEffective");
+            return View("TestJavaScript");
         }
 
         public IActionResult Test()

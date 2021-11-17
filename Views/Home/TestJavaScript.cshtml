@@ -1,0 +1,75 @@
+﻿<html>
+<head>
+    <script type="text/javascript">
+        function popupMsg(msg) {
+            alert(msg);
+        }
+
+        //function findObj(n, d) {
+        //    var p, i, x;
+        //    if (!d) d = document;
+        //    if ((p = n.indexOf("?")) > 0 && parent.frames.length) {
+        //        d = parent.frames[n.substring(p + 1)].document;
+        //        n = n.substring(0, p);
+        //    }
+        //    if (!(x = d[n]) && d.all) x = d.all[n];
+        //    for (i = 0; !x && i < d.forms.length; i++)
+        //        x = d.forms[i][n];
+        //    for (i = 0; !x && d.layers && i < d.layers.length; i++)
+        //        x = findObj(n, d.layers[i].document);
+        //    if (!x && d.getElementById)
+        //        x = d.getElementById(n);
+        //    return x;
+        //}
+        //function showHideLayers() {
+        //    var i, p, v, obj, args = showHideLayers.arguments;
+        //    for (i = 0; i < (args.length - 2); i += 3)
+        //        if ((obj = findObj(args[i])) != null) {
+        //            v = args[i + 2];
+        //            if (obj.style) {
+        //                obj = obj.style;
+        //                v = (v = 'show') ? 'visible' : (v == 'hide') ? 'hidden' : v;
+        //            }
+        //            obj.visibility = v;
+        //        }
+        //}
+    </script>
+</head>
+
+@*<div align="center">
+        <img src="~/Images/index.jpg" width="778" height="407" />
+        <input type="button" name="fullsscreen" value="全屏" onclick="window.open(document.location,'big','fullscreen=yes')" />
+        <input type="button" name="close" value="还原" onclick="window.close()" />
+    </div>*@
+<body onUnload="popupMsg('关闭当前页')">
+    onload="popupMsg('欢迎光临')"
+    招商加盟:
+    <form id="form1" name="form1" method="post" action="">
+        <p>
+            您的名字：<input type="text" name="textfield" />
+        </p>
+        <p>
+            <br />留言内容:<br /><br />
+            <textarea name="textarea" cols="50" rows="5" onchange=alert("输入留言内容")></textarea>
+        </p>
+    </form>
+
+    <p>
+        请在下面输入您的名字:
+        <input name="stra" id="stra" tabindex="1" value="选择输入的名称" size="16" onselect=alert("选择输入的名称") />
+    </p>
+
+    <label><input type="radio" name="RadioGroup1" value="游戏" onfocus=alert("选择游戏") />游戏</label>
+    <label><input type="radio" name="RadioGroup1" value="上网" onfocus=alert("选择上网") />上网</label>
+    <label><input type="radio" name="RadioGroup1" value="唱歌" onfocus=alert("选择唱歌") />唱歌</label>
+
+    <p> 账号:<input name="textfield" type="text" onblur="popupMsg('账号失去焦点')" /></p>
+    <p> 密码:<input name="textfield" type="text" onblur="popupMsg('密码失去焦点')" /></p>
+
+    <input name="submit" type="submit" onmouseover="popupMsg('mouseover')" value="鼠标移入" />
+    <input name="submit" type="submit" onmouseout="popupMsg('mouseout')" value="鼠标移出" />
+
+    <label ondblclick="popupMsg('DoubleClick')">双击</label>
+</body>
+</html>
+
