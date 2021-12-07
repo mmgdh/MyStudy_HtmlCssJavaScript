@@ -16,9 +16,10 @@ namespace MyStudy_HtmlCssJavaScript
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(x => x.EnableEndpointRouting = false);
-
-            var Builder = services.AddControllersWithViews(x => x.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+            services.AddControllersWithViews(x => x.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+            services.AddRazorPages();
+            //services.AddMvc();
+            //var Builder = services.AddControllersWithViews(x => x.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
 
         }
 
@@ -32,7 +33,14 @@ namespace MyStudy_HtmlCssJavaScript
 
             app.UseStaticFiles();
             app.UseDefaultFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(name: "Default", pattern: "{controller=JavaScript}/{action=Index}");
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
+            //app.UseMvc();
 
             //app.UseEndpoints(endpoints =>
             //{

@@ -4,7 +4,100 @@
         function popupMsg(msg) {
             alert(msg);
         }
+        function check() {
+            name = navigator.appName;
+            document.write("您现在使用的是" + navigator.appName + "页浏览器<br>");
+            //if (name == "Netscape") {
+            //    document.write("您现在使用的是Netscape网页浏览器<br>");
+            //}
+            //else if (name == "Microsoft Internet Explorer") {
+            //    document.write("您现在使用的是Microsoft Internet Explorer浏览器")
+            //}
+            //else {
+                
+            //}
+        }
+        function showtime() {
+            var nowTime = new Date();
+            var hours = nowTime.getHours();
+            var minutes = nowTime.getMinutes();
+            var seconds = nowTime.getSeconds();
+            var timer = "" + ((hours > 12) ? hours - 12 : hours);
+            timer += ((minutes < 10) ? ":0" : ":") + minutes;
+            timer += ((seconds < 10) ? ":0" : ":") + seconds;
+            timer += "" + ((hours > 12) ? "pm" : "am");
+            //document.clock.show.value = tiemr;
+            document.getElementById("show").value = timer;
+            setTimeout("showtime()", 1000);
+        }
+        var sec = 0;
+        var min = 0;
+        var hou = 0;
+        //flag = 0;
+        idt = window.setTimeout("update();", 1000);
+        function update() {
+            sec++;
+            if (sec == 60) {
+                sec = 0;
+                min += 1;
+            }
+            if (min == 60) {
+                min = 0;
+                hou += 1;
+            }
+            //alert(hou);
+            document.getElementById("DetentionTime").value = hou + "时" + min + "分" + sec+ "秒";
+            idt = window.setTimeout("update()", 1000);
+        }
+        var rector = 300
+        var stopit = 0
+        var a = 1
+        var zhend=null
 
+        function init(which) {
+            stopit = 0
+            zhend = which
+            zhend.style.left = 0
+            zhend.style.top=0
+        }
+        function rattleimage() {
+            if ((!document.all && !document.getElementById) || stopit == 1)
+                return;
+            zhend.visible = false
+            if (a == 1) {
+                zhend.style.top = parseInt(zhend.style.top) + rector;
+                zhend.style.width = parseInt(zhend.style.width) + rector;
+            }
+            else if (a == 2) {
+                zhend.style.left = parseInt(zhend.style.left) + rector;
+                zhend.style.height = parseInt(zhend.style.height) + rector;
+            }
+            else if (a == 3) {
+                zhend.style.top = parseInt(zhend.style.top) - rector;
+                zhend.style.width = parseInt(zhend.style.width) - rector;
+            }
+            else {
+                zhend.style.left = parseInt(zhend.style.left) - rector;
+                zhend.style.height = parseInt(zhend.style.height) - rector;
+            }
+            if (a < 4)
+                a++;
+            else
+                a = 1;
+            //alert(zhend.id + "   " + zhend.visible)
+            //alert(zhend.style.left + "--" + zhend.style.top)
+            setTimeout("rattleimage()",50)
+        }
+        function stoprattle(which) {
+            stopit = 1
+            which.style.left = 0
+            which.style.top = 0
+        }
+
+        function blink() {
+            tp.style.visibility = (tp.style.visibility == "hidden") ? "visible" : "hidden";
+            setTimeout("blink()", 500);
+        }
         //function findObj(n, d) {
         //    var p, i, x;
         //    if (!d) d = document;
@@ -33,7 +126,17 @@
         //            obj.visibility = v;
         //        }
         //}
+
+        function click() {
+            if (event.button == 2)
+                alert('禁止右击')
+        }
+        function CtrlKeyDown() {
+            if (event.ctrl)
+        }
     </script>
+
+
 </head>
 
 @*<div align="center">
@@ -41,8 +144,9 @@
         <input type="button" name="fullsscreen" value="全屏" onclick="window.open(document.location,'big','fullscreen=yes')" />
         <input type="button" name="close" value="还原" onclick="window.close()" />
     </div>*@
-<body onUnload="popupMsg('关闭当前页')">
+<body onload="showtime(); blink()" onUnload="popupMsg('关闭当前页')">
     onload="popupMsg('欢迎光临')"
+    onload="check()"
     招商加盟:
     <form id="form1" name="form1" method="post" action="">
         <p>
@@ -70,6 +174,30 @@
     <input name="submit" type="submit" onmouseout="popupMsg('mouseout')" value="鼠标移出" />
 
     <label ondblclick="popupMsg('DoubleClick')">双击</label>
-</body>
+
+    <p><a href="https://www.baidu.com">history对象</a></p>
+    <form name="form1" method="post" action="">
+        <input name="按钮" type="button" onclick="history.back()" />
+        <input name="前进" type="button" onclick="history.forward()" />
+    </form>
+
+    <form name="clock" onsubmit="0">
+        <input type="text" name="show" id="show" size="10" style="background-color:lightyellow;border-width:3px;" />
+
+        <input type="text" name="DetentionTime" id="DetentionTime" size="10" style="background-color:lightcoral;border-width:3px;" />
+    </form>
+
+    <div id="zhendimage" onmouseover="init(this); rattleimage()" onmouseout="stoprattle(this)">
+        <img class="zhendimage" src="~/Images/index.jpg" width="100" height="100" />
+    </div>
+    <div id="tp" style="visibility:hidden">
+        <img class="zhendimage" src="~/Images/index.jpg" width="100" height="100" />
+    </div>
+
+    <div align="center">
+        <input type="button" name="FullScreen" value="全屏显示" onclick="window.open(document.location,'big','fullscreen=yes')" />
+    </div>
+
+</body> 
 </html>
 

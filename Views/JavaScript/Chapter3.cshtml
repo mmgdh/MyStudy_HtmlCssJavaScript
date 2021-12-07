@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script type="text/javascript">
+        let s1 = Symbol('foo'),
+            s2 = Symbol('bar'),
+            s3 = Symbol('baz'),
+            s4 = Symbol('qux');
+        let o = {
+            [s1]: 'foo val'
+        };
+        console.log(o);
+        Object.defineProperty(o, s2, { value: 'bar val' });
+        console.log(o);
+        Object.defineProperties(o, {
+            [s3]: { value: 'baz val' },
+            [s4]: { value: 'qux val' }
+        });
+        console.log(o);
+
+
+
+
+
+        function printRow(strings) {
+            console.log('Actual characters');
+            for (const string of strings) {
+                console.log(string);
+            }
+            console.log(String.raw`\u00A9`);
+            console.log(`\u00A9`);
+            console.log("Escaped character");
+            for (const rawString of strings.raw) {
+                console.log(rawString);
+            }
+        }
+        printRow`\u00A9${'and'}\n`;
+        printRow(`\u00A9${'and'}\n`);
+    </script>
+    <body>
+        asdasdads
+    </body>
+}
