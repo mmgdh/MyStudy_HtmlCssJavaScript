@@ -10,7 +10,7 @@ namespace MyStudy_HtmlCssJavaScript.Controllers
     {
         [Route("")]
         [Route("Index")]
-        public IActionResult Array()
+        public IActionResult TypedArray()
         {
             return View();
         }

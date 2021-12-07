@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script>
+        console.log("-------------------ArrayBuffer---------------------");
+        const buf = new ArrayBuffer(16);
+        console.log(buf.byteLength);
+        const buf2 = buf.slice(4, 12);
+        console.log(buf2.byteLength);
+        console.log("-------------------DataView---------------------");
+        const fullDataView = new DataView(buf);
+        const firstHalfDataView = new DataView(buf, 0, 8);//从起点开始，限制为前八个
+        const secondHalfDataView = new DataView(buf, 8);//从缓冲的第九个字节开始
+    </script>
+}
