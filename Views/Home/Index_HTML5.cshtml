@@ -1,0 +1,157 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index_HTML5</title>
+
+    <style type="text/css">
+        body {
+            font-size: 13px
+        }
+
+        p {
+            padding: 0px;
+            margin: 0px
+        }
+
+        .inputbtn {
+            border: solid 1px #ccc;
+            background-color: #eee;
+            line-height: 18px;
+            font-size: 12px
+        }
+    </style>
+
+    <script>
+        function playmusic() {
+            document.getElementById("audio1").play();//不知为啥无效
+        }
+    </script>
+</head>
+<body onload="playmusic();">
+
+
+    <p>TryMarkM<mark>ThisIsMark</mark></p>
+    <time datetime="2021-09-21">ToDay Is 10-1</time>
+    <p>ToDay Is 10-1</p>
+
+    <p id="pTip">开始下载</p>
+    <progress value="0" max="100" id="proDownFile"></progress>
+    <input type="button" value="下载" class="inputbtn" onclick="Btn_Click();" />
+
+    <meter value="30" optimum="1"></meter>
+    <video src="" controls="controls"></video>
+    <audio src=""></audio>
+    <embed src="" />
+    <form>
+        <input name="urls" type="url" value="www.baidu.com" />
+        <input id="_date" name="ss" type="date" />
+        <input type="submit" value="提交" />
+    </form>
+
+    <article>
+        2312312
+        <section>111</section>
+    </article>
+    <aside>
+        <h2>侧边栏</h2>
+        <ul>
+            <li>新闻·</li>
+            <li>松大</li>
+        </ul>
+    </aside>
+
+    <nav>
+        <ul>
+            <li>页面1</li>
+            <li>页面2</li>
+            <li>页面3</li>
+            <li>页面4</li>
+        </ul>
+    </nav>
+
+    <video preload="auto" controls="controls" autoplay="autoplay" loop="loop">
+        <source src="~/Videos/HJCX_1.mp4" type="video/mp4" />
+        <source src="~/Videos/HJCX_1.mpeg" type="video/mpeg" />
+    </video>
+
+    <audio id="audio1" controls="controls" onplay="" onpause="" onended="">
+        <source src="~/Audios/川田麻美 (川田まみ) - 绯色の空 (绯色天空).mp3" type="audio/mp3" />
+    </audio>
+
+    <p id="location">获取位置</p>
+    <button onclick="getLocation()">Try Get</button>
+    <div id="mapholder"></div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        var x = document.getElementById("loacation");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            }
+            else {
+                x.innerHTML = "获取地理位置失败";
+            }
+            function showPosition(position) {
+                var latlon = position.coords.latitude + ", " + position.coords.longitude;
+                var img_url = "http://maps.googleapis.com/maps/api/staticmap? center=" + latlon + "&zoom=14&size=400x300&sensor=false";
+                document.getElementById("mapholder").innerHTML = "<img src='" + img_url + "' />";
+                alert(latlon);
+            }
+            function showError(Error) {
+                switch (Error.code) {
+                    case Error.PERMISSION_DENIED:
+                        X.innerHTML = "User Denied ";
+                        break;
+                    case Error.PERMISSION_UNAVAILABLE:
+                        x.innerHTML = "Location information is unavailable";
+                        break;
+                    case Error.TIMEOUT:
+                        x.innerHTML = "Time Out";
+                        break;
+                    case Error.UnKNown_Error:
+                        x.innerHTML = "UnKown";
+                        break;
+                }
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        var intValue = 0;
+        var intTimer;
+        var objPro = document.getElementById('proDownFile');
+        var objTip = document.getElementById('pTip');
+        function Interval_handler() {
+            intValue++;
+            objPro.value = intValue;
+            if (intValue >= objPro.max) {
+                clearInterval(intTimer);
+                objTip.innerHTML = "下载完成!";
+            }
+            else {
+                objTip.innerHTML = "正在下载" + intValue + "%";
+            }
+        }
+        function Btn_Click() {
+            alert("start");
+            intTimer = setInterval(Interval_handler, 100);
+        }
+    </script>
+</body>
+</html>
