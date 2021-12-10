@@ -12,5 +12,88 @@
         const fullDataView = new DataView(buf);
         const firstHalfDataView = new DataView(buf, 0, 8);//从起点开始，限制为前八个
         const secondHalfDataView = new DataView(buf, 8);//从缓冲的第九个字节开始
+        console.log("-------------------Map---------------------");
+        const m1 = new Map([
+            ["key1", "val1"],
+            ["key2", "val2"],
+            ["key3", "val3"]
+        ]);
+        console.log(m1.size);
+        //自定义迭代器初始化映射
+        const m2 = new Map({
+            [Symbol.iterator]: function* () {
+                yield ["key1", "val1"];
+                yield ["key2", "val2"];
+                yield ["key3", "val3"];
+            }
+        });
+        console.log(m2.size);
+        const m3 = new Map([[]]);
+        console.log(m3.has(undefined));//true;
+        const m5 = new Map();
+        m5.set("firstName", "林")
+            .set("lastName", "阿汉");
+        m5.clear();
+
+        console.log(m1.entries === m1[Symbol.iterator]);//true
+        for (let pair of m1.entries()) {
+            console.log(pair);
+        }
+        console.log([...m2]);
+        console.log(m2);
+        console.log("-------------------WeekMap---------------------");
+        const key1 = { id: 1 },
+              key2 = { id: 2 },
+            key3 = { id: 3 };
+        const wm1 = new WeakMap([
+            [key1, "val1"],
+            [key2, "val2"],
+            [key3, "val3"]
+        ]);
+        console.log(wm1.get(key1));
+        console.log(wm1.get(key2));
+        console.log(wm1.get(key3));
+        const stringKey = new String("key1");
+        const wm3 = new WeakMap([[stringKey, "vall"]]);
+        console.log(wm3.get(stringKey));//val1
+        console.log("-------------------Set---------------------");
+        const s1 = new Set(["val1", "val2", "val3"]);
+        console.log(s1.size);
+        const s2 = new Set({
+            [Symbol.iterator]: function* () {
+                yield "val1";
+                yield "val2";
+                yield "val3";
+            }
+        })
+        console.log(s2);
+        console.log([...s1]);
+        s1.forEach((val, dupval) =>
+            console.log(`${val}->${dupVal}`)
+        );
+        console.log("-------------------迭代与扩展操作---------------------");
+        let iterableThings = [
+            Array.of(1, 2),
+            typedArr = Int16Array.of(3, 4),
+            new Map([[5, 6], [7, 8]]),
+            new Set([9, 10])
+        ];
+        for (const iterableThing of iterableThings) {
+            for (const x of iterableThing) {
+                console.log(x);
+            }
+        }
+
+        let arr9 = [1, 2, 3];
+        let typedArr1 = Int16Array.of(...arr9);
+        let typedArr2 = Int16Array.from(arr1);
+        console.log(typedArr1);
+        console.log(typedArr2);
+        let map9 = new Map(arr1.Map((x) => [x, 'val' + x]));
+        console.log(map9);
+        let set = new Set(typedArr2);
+        console.log(set);
+        let arr2 = [...set];
+        console.log(arr2);
     </script>
 }
