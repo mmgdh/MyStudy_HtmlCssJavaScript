@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script>
+        let arr = ['foo', 'bar', 'baz'];
+        //for-of 循环
+        for (let el of arr) {
+            console.log(el);
+        }
+        //数组解构
+        let [a, b, c] = arr;
+        console.log(a, b, c);
+        //扩展操作符
+        let arr2 = [...arr];
+        console.log(arr2);
+        //Array.from()
+        let arr3 = Array.from(arr);
+        console.log(arr3);
+        //Set构造函数
+        let set = new Set(arr);
+        console.log(set);
+        //Map构造函数
+        let pairs = arr.map((x, i) => [x, i]);
+        console.log(pairs);
+        let map = new Map(pairs);
+        console.log(map);
+        //迭代器工厂函数
+        console.log(arr[Symbol.iterator]);
+        //迭代器
+        let iter = arr[Symbol.iterator]();
+        console.log(iter);
+        //执行迭代
+        console.log(iter.next());
+        console.log(iter.next());
+        console.log(iter.next());
+        console.log(iter.next());//{done:true,value:undefined}
+
+
+
+        //自定义迭代器
+        class Counter {
+            constructor(limit) {
+                this.limit = limit;
+            }
+
+            [Symbol.iterator]() {
+                let count = 1,
+                    limit = this.limit;
+                console.log(limit);
+                return {
+                    next() {
+                        if (count <= limit) {
+                            return { done: false, value: this.count++ };
+                        }
+                        else {
+                            return { done: true, value: undefined };
+                        }
+                    }
+                };
+            }
+        }
+        let counter = new Counter(3);
+        for (let i of counter) {
+            console.log(i);
+        }
+    </script>
+    <script>
+
+    </script>
+}
