@@ -40,18 +40,18 @@
 
         //自定义迭代器
         class Counter {
-            constructor(limit) {
-                this.limit = limit;
+            constructor(_limit) {
+                this.limit = _limit;
             }
 
             [Symbol.iterator]() {
                 let count = 1,
-                    limit = this.limit;
-                console.log(limit);
+                    Newlimit = this.limit;
+                //console.log(Newlimit);
                 return {
                     next() {
-                        if (count <= limit) {
-                            return { done: false, value: this.count++ };
+                        if (count <= Newlimit) {
+                            return { done: false, value: count++ };
                         }
                         else {
                             return { done: true, value: undefined };
@@ -61,9 +61,50 @@
             }
         }
         let counter = new Counter(3);
+        console.log("-----------------自定义迭代器-----------------");
         for (let i of counter) {
             console.log(i);
         }
+        console.log("-----------------生成器函数-----------------");
+        function* generatorFn() {
+            console.log('foobar',"1");
+        }
+        let generatorObject = generatorFn();//初次调用生成器函数不会打印日志
+        generatorObject.next();
+
+        function* nTimes(n) {
+            if (n > 0) {
+                yield* nTimes(n - 1);//递归输出
+                yield n - 1;
+            }
+        }
+        for (const x of nTimes(3)) {
+            console.log(x);
+        }
+
+        class foo {
+            constructor() {
+                this.value = [1, 2, 3];
+            }
+            *[Symbol.iterator]() {
+                yield* this.value;
+            }
+        }
+        const f = new foo();
+        for (const x of f) {
+            console.log(x);
+        }
+        //return()方法会强制生成器进入关闭状态。提供给return()方法的值，就是终止迭代器对象的值：
+        function* generatorFn9() {
+            for (const x of [1, 2, 3]) {
+                yield x;
+            }
+        }
+        //调用return强制关闭
+        const g = generatorFn9();
+        console.log(g);//suspended
+        console.log(g.return(4));//{done:true,value: 4}
+        console.log(g);//closed
     </script>
     <script>
 
