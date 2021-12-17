@@ -1,0 +1,183 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script>
+        //访问器属性是不能直接定义的，必须使用Object.defineProperty()。下面是一个例子：
+        let book = {
+            year_: 2021,
+            edition: 1
+        };
+        Object.defineProperty(book, "year", {
+            get() {
+                return this.year_
+            },
+            set(newValue) {
+                if (newValue > 2021) {
+                    this.year_ = newValue;
+                    this.edition += newValue - 2021;
+                }
+            }
+        });
+        book.year = 2022;
+        console.log(book.edition);
+        //Object.define-Properties()方法。这个方法可以通过多个描述符一次性定义多个属性
+        let book2 = {};
+        Object.defineProperties(book2, {
+            _year: {
+                value:2021
+            },
+            _edition: {
+                value:1
+            },
+            year: {
+                get() {
+                    return this._year;
+                },
+                set(newValue) {
+                    if (newValue > 2021) {
+                        this.year_ = newValue;
+                        this.edition += newValue - 2021;
+                    }
+                }
+            }
+        });
+        console.log("---------------------Object.getOwnPropertyDescriptor()------------------------")
+        //使用Object.getOwnPropertyDescriptor()方法可以取得指定属性的属性描述符。
+        let descriptor = Object.getOwnPropertyDescriptor(book2, "_year");
+        console.log(descriptor.value);
+        console.log(descriptor.configurable); // false
+        console.log(descriptor.get); // false
+        //使用Object.getOwnPropertyDescriptors()返回全部属性描述符
+        let descriptors = Object.getOwnPropertyDescriptors(book2);
+        console.log(descriptors);
+        /*使用Object.assign()方法。这个方法接收一个目标对象和一个或多个源对象作为参数，然后将每个源对象中可枚举（Object.propertyIsEnumerable()返回true）和自有（Object.hasOwnProperty()返回true）属性复制到目标对象。以字符串和符号为键的属性会被复制。对每个符合条件的属性，这个方法会使用源对象上的[[Get]]取得属性的值，然后使用目标对象上的[[Set]]设置属性的值。*/
+        console.log("---------------------Object.assign()------------------------")
+        let dest, src, result;
+        dest = {test:'test'};
+        src = { id: 'src',Name:'name' };
+        result = Object.assign(dest, src);
+        console.log(dest);//dest值也会改变
+        console.log(src);
+        console.log(result);
+        dest = { id: 'dest' };
+        Add1 = { id: 'src1', a: 'foo' };
+        Add2 = { id: 'src2', b: 'bar' };
+        //result = Object.assign(dest, { id: 'src1', a: 'foo' }, { id: 'src2', b: 'bar' });
+        result = Object.assign(dest, Add1, Add2);
+        console.log(dest);//dest被修改，同result,id值取最后一个赋值
+        console.log(Add1);
+        console.log(Add2);
+        console.log(result);
+        //Object.assign()没有“回滚”之前赋值的概念，因此它是一个尽力而为、可能只会完成部分复制的方法。
+
+        //可计算属性
+        const nameKey = 'name';
+        const ageKey = 'age';
+        const jobKey = 'job';
+        let uniqueToken = 0;
+        function getUniqueKey(key) {
+            return `${key}_${uniqueToken++}`;
+        }
+        let person = {
+            [getUniqueKey(nameKey)]: 'Matt',
+            [getUniqueKey(ageKey)]: 27,
+            [getUniqueKey(jobKey)]: 'SoftWare engineer'
+        };
+        console.log(person);
+        //对象解构
+        let person0 = {
+            name: 'Matt',
+            age: 27
+        };
+        let { name: personName, age: personAge,job='engineer' } = person;
+        console.log(personName);
+        console.log(personAge);
+        //原型
+        //为避免使用Object.setPrototypeOf()可能造成的性能下降，可以通过Object.create()来创建一个新对象，同时为其指定原型：
+        let biped = {
+            numLegs: 2
+        };
+        let person1 = Object.create(biped);
+        person1.name = 'Matt';
+        console.log(person1.name);
+        console.log(person1.numLegs);
+        console.log(Object.getPrototypeOf(person1) === biped);//true 继承于biped
+
+        let keys = Object.getOwnPropertyNames(person1);//获取所有实例
+        console.log(keys);
+
+        console.log("---------------------对象迭代------------------------");
+        const o = {
+            foo: 'nar',
+            baz: 1,
+            qux: {},
+            [Symbol()]:'foo'//符号属性会被下面的方法忽略
+        };
+        console.log(Object.values(o));
+        console.log(Object.entries(o));
+
+        String.prototype.startsWithqq = function (text) {
+            return this.indexOf(text) === 1;
+        };
+        let msg = "Hello world";
+        console.log(msg.startsWithqq("ello"));
+        console.log("---------------------原型------------------------");
+        function SuperType(name) {
+            this.name = name;
+            this.colors = ["red", "blue", "green"];
+        }
+        SuperType.prototype.sayName = function () {
+            console.log(this.name);
+        };
+        function SubType(name, age) {
+            //继承属性
+            SuperType.call(this, name);//!!!!!!!!!!!!!!!!
+            this.age = age;
+        }
+        //继承方法
+        SubType.prototype = new SuperType();
+        SubType.prototype.sayAge = function () {
+            console.log(this.age);
+        }
+        let instance1 = new SubType("Nicholas", 29);
+        instance1.colors.push("black");
+        console.log(instance1.colors);
+        instance1.sayName();
+        instance1.sayAge();
+        let instance2 = new SubType();
+        console.log(instance2.colors);
+        instance2.sayName();
+        instance2.sayAge();
+
+        let person2 = {
+            name: "Nicholas",
+            friends: ["Shelby", "Court", "Van"]
+        };
+        let anotherPerson = Object.create(person2, { name: { value: "Greg" } });//重写
+        console.log(anotherPerson.name);//"Greg"
+        /*这个inheritPrototype()函数实现了寄生式组合继承的核心逻辑。这个函数接收两个参数：子类构造函数和父类构造函数。在这个函数内部，第一步是创建父类原型的一个副本。然后，给返回的prototype对象设置constructor属性，解决由于重写原型导致默认constructor丢失的问题。最后将新创建的对象赋值给子类型的原型。如下例所示，调用inheritPrototype()就可以实现前面例子中的子类型原型赋值：*/
+        function inheritPrototype(subType, superType) {
+            let prototype = Object(superType.prototype);//创建对象
+            prototype.constructor = subType;//增强对象
+            subType.prototype = prototype;//赋值对象
+        }
+        function proototype(namem) {
+            this.name = name;
+            this.colors = ["red", "blue", "green"];
+        }
+        SuperType.prototype.sayName = function () {
+            console.log(this.name);
+        }
+        function SubType(name, age) {
+            SuperType.call(this, name);
+            this.age = age;
+        }
+        inheritPrototype(SubType, SuperType);
+        SubType.prototype.sayAge = function () {
+            console.log(this.age);
+        }
+        /*-----------------------------------------------------------------------------------------------------*/
+
+    </script>
+}
