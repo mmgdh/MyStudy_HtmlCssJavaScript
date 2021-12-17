@@ -1,0 +1,138 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script>
+        //类方法等同于对象属性，因此可以使用字符串、符号或计算的值作为键：
+        const symbolKey = Symbol('symbolKey');
+        class Person {
+
+            set name(newName) {
+                this._name = newName
+            }
+            get name(){
+                return this._name + "hahah";
+            }
+
+            stringKey() {
+                console.log("stringKey");
+            }
+            [symbolKey]() {
+                console.log("symbolKey");
+            }
+            ['computed' + 'Key']() {
+                console.log("computedKey");
+            }
+            //添加到this的所有内容都会存在于不同的实例上
+            constructor() {
+                this.locate = () => console.log('instance', this);
+                this.nicknames = ['Jack', 'Jake', 'J-Dog'];
+            }
+            //定义在类的原型对象上面
+            locate() {
+                console.log('prototype', this);
+            }
+            //定义在类本身
+            static locate() {
+                console.log('class', this);
+            }
+
+            *[Symbol.iterator]() {
+                yield* this.nicknames.entries();
+            }
+            //[Symbol.iterator]() {
+            //    return this.nicknames.entries();
+            //}
+            //上述两种方式都行
+        }
+        let p = new Person();
+        p.stringKey();
+        p[symbolKey]();
+        p.computedKey();
+        p.name = "mmgdh";
+        console.log(p.name); 
+        p.locate();
+        Person.prototype.locate();
+        Person.locate();
+        for (let [idx, nickname] of p) {
+            console.log(nickname);
+        }
+        console.log("---------------------------继承---------------------------")
+        class Vehicle {
+            constructor() {
+                this.hasEngine = true;
+            }
+            static identify() {
+                console.log('Vehicle');
+            }
+        }
+        class Bus extends Vehicle {
+            constructor() {
+                super();//相当于super.constructor();
+                console.log(this instanceof Vehicle);//true
+                console.log(this);//Bus { hasEngine:true}
+            }
+        }
+        new Bus();
+        Bus.identify();
+        console.log("---------------------------抽象基类---------------------------");
+        //抽象基类
+        class VehicleAbstract {
+            constructor() {
+                console.log(new.target);
+                //if (new.target === VehicleAbstract) {
+                //    throw new Error('无法自我定义');
+                //}
+                //if (!this.foo) {
+                //    throw new Error("派生类必须含有方法foo()");
+                //}
+            }
+        }
+        //派生类
+        class Bus2 extends VehicleAbstract { }
+        new Bus2();
+        new VehicleAbstract();
+        console.log("---------------------------继承内置类型---------------------------");
+        class SuperArray extends Array {
+            shuffle() {
+                //洗牌算法
+                for (let i = this.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this[i], this[j]] = [this[j], this[i]];
+                }
+            }
+            static get [Symbol.species]() {
+                return Array;//覆盖默认行为，修改返回实例类
+            }
+        }
+        let a = new SuperArray(1, 2, 3, 4, 5);
+        console.log(a instanceof Array);//true
+        console.log(a instanceof SuperArray);//true
+        console.log(a);
+        a.shuffle();
+        console.log(a);
+        console.log("---------------------------类混入---------------------------");
+        class Vechicle5 { }
+        let FooMixin = (Superclass) => class extends Superclass {
+            foo() {
+                console.log('foo');
+            }
+        };
+        let BarMixin = (Superclass) => class extends Superclass {
+            bar() {
+                console.log('bar');
+            }
+        };
+        let BazMixin = (Superclass) => class extends Superclass {
+            baz() {
+                console.log('baz');
+            }
+        };
+        class Bus3 extends FooMixin(BarMixin(BazMixin(Vechicle5))) { }
+        let b = new Bus3();
+        b.foo();
+        b.bar();
+        b.baz();
+
+    </script>
+}
