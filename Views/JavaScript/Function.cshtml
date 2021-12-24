@@ -1,0 +1,177 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <script>
+        //给参数传undefined相当于没有传值，不过这样可以利用多个独立的默认值：
+        function makeKing(name = 'Henry', numerals = 'VIII') {
+            return `King ${name} ${numerals}`;
+        }
+        console.log('MMGDH');
+        console.log(undefined, 'VI');//'King Henry VI'
+
+        let makeKing2 = (name = 'Henry') => `King ${name}`;
+        console.log(makeKing2());
+        console.log("----------------------10.6.2 收集参数---------------------")
+        function ignoreFirst(firstValue, ...values) {
+            console.log(values);
+        }
+        ignoreFirst(1, 2, 3);
+
+        let getSum = (...values) => {
+            return values.reduce((x, y) => x + y, 0);
+        }
+        console.log(getSum(1, 2, 3));//6
+        console.log("----------------------10.9 函数内部---------------------");
+        function factorial(num) {
+            if (num <= 1) {
+                return 1;
+            }
+            else {
+                return num * arguments.callee(num - 1);//arguments.callee指向arguments对象所在函数的指针。
+            }
+        }
+        console.log(factorial(5));
+
+        window.color = 'red';
+        let o = {
+            color: 'blue'
+        };
+        function sayColor() {
+            console.log(this.color);
+        }
+        sayColor();//red
+        o.sayColor = sayColor;
+        o.sayColor();//blue
+
+        function outer() {
+            inner();
+        }
+        function inner() {
+            console.log(inner.caller);//arguments.callee.caller//严格模式会报错
+        }
+        outer();//outer函数的源码
+
+        function King() {
+            if (!new.target) {//如果函数是正常调用的，则new.target的值是undefined；如果是使用new关键字调用的，则new.target将引用被调用的构造函数。
+                console.warn('King Must be instantiated using "new"');
+            }
+            console.log('Yes');
+        }
+        new King();//Yes
+        King();//Error
+        console.log("-----------------------10.10 函数属性与方法----------------------")
+        //apply()方法接收两个参数：函数内this的值和一个参数数组。第二个参数可以是Array的实例，但也可以是arguments对象。
+        function sumNum(num1, num2) {
+            return num1 + num2;
+        }
+        function CallSum1(num1, num2) {
+            return sumNum.apply(this, arguments);
+            //return sum.apply(this, [num1, num2]);
+        }
+        console.log(CallSum1(10, 20));//30
+
+        //通过call()向函数传参时，必须将参数一个一个地列出来
+        function callSum(num1, num2) {
+            return sumNum.call(this, num1, num2);
+        }
+        console.log(callSum(20, 15));
+        //apply()和call()真正强大的地方并不是给函数传参，而是控制函数调用上下文即函数体内this值的能力。
+        window.color2 = 'red';
+        let o2 = {
+            color2: 'blue'
+        }
+        function sayColor() {
+            console.log(this.color2);
+        }
+        sayColor();//red
+        sayColor(this);//red
+        sayColor(window);//red
+        sayColor(o2);//blue
+        //bind()方法会创建一个新的函数实例，其this值会被绑定到传给bind()的对象。
+        let objectSayColor = sayColor.bind(o2);
+        objectSayColor();
+        console.log("---------------------10.13.2 尾调用优化的代码----------------------")
+        function fib_bad(n) {//斐波那契
+            if (n < 2) {
+                return n;
+            }
+            return fib_bad(n - 1) + fib_bad(n - 2);
+        }
+        function fib(n) {
+            return fibImpl(0, 1, n);
+        }
+        "use strict"
+        function fibImpl(a, b, n) {//速度比上面快多了。。
+            if (n === 0) {
+                return a;
+            }
+            return fibImpl(b, a + b, n - 1);
+        }
+        for (let i = 0; i < 100; i++) {
+            console.log(fib(i));
+        }
+        console.log("---------------------10.14 闭包----------------------")
+        //闭包指的是那些引用了另一个函数作用域中变量的函数，通常是在嵌套函数中实现的。
+        function createComparisonFunction(propertyName) {
+            return function (object1, object2) {
+                let value1 = object1[propertyName];//引用了外部函数的变量propertyName
+                let value2 = object2[propertyName];
+                if (value1 < value2) {
+                    return -1;
+                }
+            }
+        }
+        let compareNames = createComparisonFunction('Name');        //创建比较函数
+        let result = compareNames({ name: 'Nico' }, { name: 'Matt' });//调用
+        compareNames = null;//解除对函数的引用，释放内存
+        console.log("---------------------10.14.1 this对象----------------------");
+        window.identity = 'The Window';
+        let object = {
+            identity: 'My Object',
+            getIdentityFunc() {
+                return function () {
+                    return this.identity;
+                };
+            }
+        }
+        console.log(object.getIdentityFunc()());//The Window
+        //每个函数在被调用时都会自动创建两个特殊变量：this和arguments。内部函数永远不可能直接访问外部函数的这两个变量。但是，如果把this保存到闭包可以访问的另一个变量中，则是行得通的。比如：
+        let object2 = {
+            identity: 'My Object',
+            getIdentityFunc() {
+                let that = this;
+                return function () {
+                    return that.identity;
+                }
+            }
+        };
+        console.log(object2.getIdentityFunc()());
+        console.log("-------------------10.15 立即调用的函数表达式-------------------");
+        //类似于函数声明，但由于被包含在括号中，所以会被解释为函数表达式。
+        let divs = document.querySelectorAll('div');
+        for (let i = 0; i < divs.length; ++i) {
+            divs[i].addEventListener('click', function () {
+                console.log(i);
+            });
+        }
+        console.log("-------------------10.16.2 模块模式-------------------");
+        let application = function () {
+            //私有变量和私有函数
+            let components = new Array();
+            //初始化
+            components.push(new BaseComponet());
+            //公共接口
+            return {
+                getComponentCount() {
+                    return components.length;
+                },
+                registerComponent(component) {
+                    if (typeof component == 'object') {
+                        components.push(component);
+                    }
+                }
+            };
+        }();
+    </script>
+}
