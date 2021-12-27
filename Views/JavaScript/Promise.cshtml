@@ -20,6 +20,7 @@
             p2.then(() => onResolved('p2'), () => onRejected('p2'));
         }
         A();
+        //Promise.prototype.then() 调用它就相当于调用Promise.prototype. then(onResolve, onRejected)。
         function T_resolve() {
             console.log("-----------------------T_resolve----------------------")
             let p1 = Promise.resolve('foo');
@@ -76,9 +77,105 @@
             setTimeout(console.log, 0, p10);//Promise<rejected>:baz
             setTimeout(console.log, 0, p11);//Promise<resolved>:Error:qux
         }
-        T_resolve();
-        T_reject();
+        //T_resolve();
+        //T_reject();
+
+        //Promise.prototype.catch() 调用它就相当于调用Promise.prototype.then(null, onRejected)。
+        //Promise.prototype.finally()
 
 
+        function TryCatch() {
+            new Promise((resolve, reject) => {
+                console.log('begin async');
+                reject(Error('bar'));
+            }).catch((e) => {
+                console.log('caught error', e);
+            }).then(() => {
+                console.log('continue async');
+            }).finally(() => console.log('finally handler'));
+        }
+        TryCatch();
+
+        //11.2.4 期约连锁与期约合成
+        function F_Race() {
+            let p1 = Promise.race([Promise.resolve(), Promise.resolve()]);
+
+        }
+        function TryAdd() {
+            function addTwo(x) { return x + 2; }
+            function addThree(x) { return x + 3; }
+            function addFive(x) { return x + 5; }
+            function addTen(x) {
+                return [addTwo, addThree, addFive].reduce((Promise, fn) => Promise.then(fn), Promise.resolve(x));
+            }
+        }
+
+        class TrackablePromise extends Promise {
+            constructor(executer) {
+                const notifyHandles = [];
+                super((resolve, reject) => {
+                    return executer(resolve, reject, (status) => {
+                        notifyHandles.map((handler) => handler(status));
+                    });
+                });
+                this.notifyHandles = notifyHandles;
+            }
+            notify(notifyHandler) {
+                this.notifyHandles.push(notifyHandler);
+                return this;
+            }
+        }
+        let p = new TrackablePromise((resolve, reject, notify) => {
+            function countdown(x) {
+                if (x > 0) {
+                    notify(`${20 * x}% remaining`);
+                    setTimeout(() => countdown(x - 1), 1000);
+                } else {
+                    resolve();
+                }
+            }
+            countdown(5);
+        });
+        p.notify((x) => setTimeout(console.log, 0, 'progress:', x));
+        p.then(() => setTimeout(console.log, 0, 'completed'));
+
+        //-----------------------------async/await-----------------------------
+        function TestAsyncRet() {
+            async function foo() {
+                return 'foo';
+            }
+            foo().then(console.log);//foo
+            async function bar() {
+                return ['bar'];
+            }
+            bar().then(console.log);//['bar']
+            async function baz() {
+                const thenable = {
+                    then(callback) { callback('baz'); }
+                };
+                return thenable;
+            }
+            baz().then(console.log);//baz
+            async function qux() {
+                return Promise.resolve('qux');
+            }
+            qux().then(console.log);//qux
+            async function foo2() {
+                console.log(1);
+                throw 3;
+            }
+            foo2().catch(console.log);
+            console.log(2);// 1 2 Uncaught(inpromise):3
+        }
+
+        async function sleep(delay) {
+            return new Promise((resolve) => setTimeout(resolve, delay));
+        }
+        async function fooq() {
+            const t0 = Date.now();
+            await sleep(1500);
+            console.log(Date.now() - t0);
+        }
+        fooq();
     </script>
 }
